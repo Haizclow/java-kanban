@@ -38,7 +38,7 @@ public class TaskManager {
         subtask.setId(id);
         subtasks.put(id, subtask);
 
-        Epic epic = epics.get(subtask.getEpicId()); //при изменение данного метода перестает корректно работать добавление и получается так что подзадачи вообще не добавляются...
+        Epic epic = epics.get(subtask.getEpicId());
         if (epic != null) {
             epic.addSubtask(subtask);
         }
@@ -129,15 +129,11 @@ public class TaskManager {
 
     public void deleteEpics() {
         epics.clear();
-        deleteSubtasks();
     }
     public void deleteSubtasks(){
         subtasks.clear();
-        for (Epic epic : epics.values()) {
-            epic.getSubtasks().clear();
-            epic.updateStatus();
-        }
     }
+
 }
 
 
