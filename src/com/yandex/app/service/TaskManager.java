@@ -33,4 +33,5 @@ public interface TaskManager {
     void deleteEpics();
     void deleteSubtasks();
 
+    List<Task> getHistory();
 }
