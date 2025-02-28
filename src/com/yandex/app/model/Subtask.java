@@ -1,7 +1,5 @@
 package com.yandex.app.model;
 
-import com.yandex.app.service.TaskManager;
-
 public class Subtask extends Task{
     private int epicId;
 

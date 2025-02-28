@@ -1,14 +1,10 @@
-//
-//простите пожалуйста, я совсем запутался уже;-;
-//Кстати кц про присутсвие классов в src их там по факту как бы нет. но git показывает что они там лежат.
-// может вообще всю ветку удалить или что - то  в этои роде. Просто  у меня не получается почистить коммиты
-//чтобы репозиторий был более чистым.
+
 package com.yandex.app;
 
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.Subtask;
 import com.yandex.app.model.Task;
-import com.yandex.app.model.TaskStatus;
+import com.yandex.app.service.Managers;
 import com.yandex.app.service.TaskManager;
 import java.util.List;
 
@@ -16,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
 
         Task task1 = new Task("Задача 1", "Описание задачи 1");

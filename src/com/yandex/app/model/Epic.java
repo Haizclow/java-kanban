@@ -1,6 +1,5 @@
 package com.yandex.app.model;
 
-import com.yandex.app.service.TaskManager;
 import java.util.ArrayList;
 
 
