@@ -66,7 +66,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) return;
 
         int id = task.getId();
-        // Внутренняя логика удаления без вызова API метода remove()
         Node existingNode = historyMap.get(id);
         if (existingNode != null) {
             removeNode(existingNode);

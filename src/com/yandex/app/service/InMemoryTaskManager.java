@@ -148,6 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
             imhm.remove(id);
         }
     }
+
     @Override
     public void deleteTasks() {
         for (Integer taskId : tasks.keySet()) {
