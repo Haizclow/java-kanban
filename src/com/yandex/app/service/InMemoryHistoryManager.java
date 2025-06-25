@@ -25,64 +25,65 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node head;
     private Node tail;
 
-    @Override
-    public void add(Task task) {
-        if (task == null) return;
-
-        int id = task.getId();
-        remove(id);//удалить старую версию задачи
-        linkLast(task);//добавить задачу в конец
-        historyMap.put(id, tail);
+    private List<Task> getTasks() {
+        List<Task> result = new ArrayList<>();
+        Node current = head;
+        while (current != null) {
+            result.add(current.task);
+            current = current.next;
+        }
+        return result;
     }
 
     private void linkLast(Task task) {
-        Node newNode = new Node(task, tail, null);//создаю новый узел
+        Node newNode = new Node(task, tail, null);
         if (tail == null) {
-            head = newNode; //это если список пуст, то новый узел станет головой
+            head = newNode;
         } else {
-            tail.next = newNode;//иначе я связываю старый тэйл с новым узлом
+            tail.next = newNode;
         }
-        tail = newNode; // и обновляю тейл
+        tail = newNode;
     }
 
     private void removeNode(Node node) {
         if (node == null) return;
 
-        Node prev = node.prev;
-        Node next = node.next;
-
-        if (prev == null) {
-            head = next;  // Удаляем первый элемент
+        if (node.prev != null) {
+            node.prev.next = node.next;
         } else {
-            prev.next = next;
+            head = node.next;
         }
 
-        if (next == null) {
-            tail = prev;  // Удаляем последний элемент
+        if (node.next != null) {
+            node.next.prev = node.prev;
         } else {
-            next.prev = prev;
+            tail = node.prev;
         }
     }
 
     @Override
-    public List<Task> getHistory() {
-        List<Task> result = new ArrayList<>();
-        Node current = head;
+    public void add(Task task) {
+        if (task == null) return;
 
-        while (current != null) {
-            result.add(current.task);
-            current = current.next;
+        int id = task.getId();
+        // Внутренняя логика удаления без вызова API метода remove()
+        Node existingNode = historyMap.get(id);
+        if (existingNode != null) {
+            removeNode(existingNode);
         }
 
-        return result;
+        linkLast(task);
+        historyMap.put(id, tail);
     }
 
     @Override
     public void remove(int id) {
-        Node node = historyMap.get(id);
-        if (node != null) {
-            removeNode(node);
-            historyMap.remove(id);
-        }
+        Node node = historyMap.remove(id);
+        removeNode(node);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return getTasks();
     }
 }
