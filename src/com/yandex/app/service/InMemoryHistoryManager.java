@@ -20,9 +20,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             this.next = next;
         }
     }
-//    private static final int MAX_SIZE = 10;
-//
-//    private final List<Task> history = new ArrayList<>(MAX_SIZE);
 
     private final Map<Integer, Node> historyMap = new HashMap<>();
     private Node head;
@@ -89,5 +86,3 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 }
-
-//я очень долго не кодил я чувствую себя тупым;(
