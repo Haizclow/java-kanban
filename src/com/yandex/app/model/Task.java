@@ -12,7 +12,7 @@ public class Task {
     private int id;
     private TaskStatus status;
 
-    public Task(String title, String description){
+    public Task(String title, String description) {
         this.title = title;
         this.description = description;
         this.status = TaskStatus.NEW;
