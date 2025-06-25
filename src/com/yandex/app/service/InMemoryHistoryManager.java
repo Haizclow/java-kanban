@@ -38,7 +38,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         historyMap.put(id, tail);
     }
 
-    private void linkLast(Task task){
+    private void linkLast(Task task) {
         Node newNode = new Node(task, tail, null);//создаю новый узел
         if (tail == null){
             head = newNode; //это если список пуст, то новый узел станет головой
