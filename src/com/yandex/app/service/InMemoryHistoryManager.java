@@ -40,7 +40,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private void linkLast(Task task) {
         Node newNode = new Node(task, tail, null);//создаю новый узел
-        if (tail == null){
+        if (tail == null) {
             head = newNode; //это если список пуст, то новый узел станет головой
         } else {
             tail.next = newNode;//иначе я связываю старый тэйл с новым узлом
