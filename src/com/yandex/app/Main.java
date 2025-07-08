@@ -1,4 +1,3 @@
-
 package com.yandex.app;
 
 import com.yandex.app.model.Epic;
@@ -6,6 +5,7 @@ import com.yandex.app.model.Subtask;
 import com.yandex.app.model.Task;
 import com.yandex.app.service.Managers;
 import com.yandex.app.service.TaskManager;
+
 import java.util.List;
 
 public class Main {
@@ -14,25 +14,16 @@ public class Main {
 
         TaskManager taskManager = Managers.getDefault();
 
+        Task task1 = new Task("Задача 1", "Описание 1");
+        int taskId1 = taskManager.addTask(task1);
 
-        Task task1 = new Task("Задача 1", "Описание задачи 1");
-        Task task2 = new Task("Задача 2", "Описание задачи 2");
+        // Добавляем задачу в историю
+        taskManager.getTaskById(taskId1);
+        System.out.println("История после добавления: " + taskManager.getHistory());
 
-        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1");
-        final int epicId1 = taskManager.addEpic(epic1);
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", epicId1);
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", epicId1);
-
-        taskManager.addTask(task1);
-        taskManager.addTask(task2);
-        taskManager.addEpic(epic1);
-        taskManager.addSubtask(subtask1);
-        taskManager.addSubtask(subtask2);
-
-        printAllTasks(taskManager);
-        System.out.println("--------------------------------------------------------");
-        taskManager.deleteTaskById(task1.getId());
-        printAllTasks(taskManager);
+        // Удаляем задачу
+        taskManager.deleteTaskById(taskId1);
+        System.out.println("История после удаления: " + taskManager.getHistory());
     }
 
     public static void printAllTasks(TaskManager taskManager) {
