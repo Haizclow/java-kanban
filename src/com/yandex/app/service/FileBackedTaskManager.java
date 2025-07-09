@@ -23,25 +23,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             final String content = Files.readString(file.toPath());
             final String[] lines = content.split("\n");
 
-            if (lines.length < 2) { // Пустой файл или только заголовок
+            if (lines.length < 2) {
                 return manager;
             }
 
-            // Чтение задач
             for (int i = 1; i < lines.length; i++) {
                 final Task task = manager.fromString(lines[i]);
                 if (task != null) {
-                    if (task instanceof Epic) {
-                        manager.epics.put(task.getId(), (Epic) task);
-                    } else if (task instanceof Subtask) {
-                        manager.subtasks.put(task.getId(), (Subtask) task);
-                    } else {
-                        manager.tasks.put(task.getId(), task);
+                    switch (task.getTaskType()) {
+                        case TASK:
+                            manager.tasks.put(task.getId(), task);
+                            break;
+                        case EPIC:
+                            manager.epics.put(task.getId(), (Epic) task);
+                            break;
+                        case SUBTASK:
+                            manager.subtasks.put(task.getId(), (Subtask) task);
+                            break;
                     }
                 }
             }
 
-            // Восстановление связей для подзадач
             for (Subtask subtask : manager.subtasks.values()) {
                 final Epic epic = manager.epics.get(subtask.getEpicId());
                 if (epic != null) {
@@ -49,7 +51,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
 
-            // Восстановление счетчика ID
             int maxId = manager.tasks.keySet().stream().max(Integer::compare).orElse(0);
             maxId = Math.max(maxId, manager.epics.keySet().stream().max(Integer::compare).orElse(0));
             maxId = Math.max(maxId, manager.subtasks.keySet().stream().max(Integer::compare).orElse(0));
@@ -66,7 +67,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
 
-            // Сохраняем все задачи в порядке: обычные, эпики, подзадачи
             for (Task task : tasks.values()) {
                 writer.write(toString(task) + "\n");
             }
@@ -82,15 +82,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private String toString(Task task) {
-        TaskType type = task instanceof Epic ? TaskType.EPIC :
-                task instanceof Subtask ? TaskType.SUBTASK : TaskType.TASK;
-
-        String epicId = task instanceof Subtask ?
+        String epicId = task.getTaskType() == TaskType.SUBTASK ?
                 String.valueOf(((Subtask) task).getEpicId()) : "";
 
         return String.join(",",
                 String.valueOf(task.getId()),
-                type.name(),
+                task.getTaskType().name(),
                 task.getTitle(),
                 task.getStatus().name(),
                 task.getDescription(),
@@ -103,41 +100,38 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
 
         String[] parts = value.split(",");
-        if (parts.length < 6) {
+        if (parts.length < 5) {
             return null;
         }
 
-        try {
-            int id = Integer.parseInt(parts[0]);
-            TaskType type = TaskType.valueOf(parts[1]);
-            String name = parts[2];
-            TaskStatus status = TaskStatus.valueOf(parts[3]);
-            String description = parts[4];
+        int id = Integer.parseInt(parts[0]);
+        TaskType type = TaskType.valueOf(parts[1]);
+        String name = parts[2];
+        TaskStatus status = TaskStatus.valueOf(parts[3]);
+        String description = parts[4];
 
-            switch (type) {
-                case TASK:
-                    Task task = new Task(name, description);
-                    task.setId(id);
-                    task.setStatus(status);
-                    return task;
-                case EPIC:
-                    Epic epic = new Epic(name, description);
-                    epic.setId(id);
-                    epic.setStatus(status);
-                    return epic;
-                case SUBTASK:
-                    int epicId = Integer.parseInt(parts[5]);
-                    Subtask subtask = new Subtask(name, description, epicId);
-                    subtask.setId(id);
-                    subtask.setStatus(status);
-                    return subtask;
-                default:
-                    return null;
-            }
-        } catch (IllegalArgumentException e) {
-            return null;
+        switch (type) {
+            case TASK:
+                Task task = new Task(name, description);
+                task.setId(id);
+                task.setStatus(status);
+                return task;
+            case EPIC:
+                Epic epic = new Epic(name, description);
+                epic.setId(id);
+                epic.setStatus(status);
+                return epic;
+            case SUBTASK:
+                int epicId = parts.length > 5 && !parts[5].isEmpty() ? Integer.parseInt(parts[5]) : 0;
+                Subtask subtask = new Subtask(name, description, epicId);
+                subtask.setId(id);
+                subtask.setStatus(status);
+                return subtask;
+            default:
+                return null;
         }
     }
+
 
     // Переопределенные методы с автосохранением
     @Override
