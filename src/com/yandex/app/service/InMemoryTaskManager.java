@@ -1,10 +1,8 @@
 package com.yandex.app.service;
 
 import com.yandex.app.model.*;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Task> tasks = new HashMap<>();

@@ -1,6 +1,5 @@
 package com.yandex.app.model;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Subtask extends Task {
