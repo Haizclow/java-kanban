@@ -16,6 +16,11 @@ public class Epic extends Task {
         updateStatus();
     }
 
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.EPIC;
+    }
+
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
