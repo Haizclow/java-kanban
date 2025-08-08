@@ -1,16 +1,31 @@
 package com.yandex.app.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("description")
     private String description;
+
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("status")
     private TaskStatus status;
-    private Duration duration;
+
+    @SerializedName("startTime")
     private LocalDateTime startTime;
+
+    @SerializedName("duration")
+    private Duration duration;
+
+
+    public Task() {}
 
     public Task(String title, String description) {
         this(title, description, null, 0);
