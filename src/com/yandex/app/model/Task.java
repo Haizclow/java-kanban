@@ -25,18 +25,15 @@ public class Task {
     @SerializedName("duration")
     private Duration duration;
 
-    // Конструктор по умолчанию для Gson
-    public Task()
-    {
+    public Task() {
     }
 
-    public Task(String title, String description)
-    {
+    public Task(String title, String description) {
         this(title, description, null, 0);
     }
 
-    public Task(String title, String description, LocalDateTime startTime, long durationMinutes)
-    {
+    public Task(String title, String description, LocalDateTime startTime,
+                long durationMinutes) {
         this.title = title;
         this.description = description;
         this.status = TaskStatus.NEW;
@@ -44,89 +41,71 @@ public class Task {
         this.duration = Duration.ofMinutes(durationMinutes);
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public TaskStatus getStatus()
-    {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(TaskStatus status)
-    {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
-    public Duration getDuration()
-    {
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration)
-    {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
-    public LocalDateTime getStartTime()
-    {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime)
-    {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime()
-    {
-        if (startTime == null || duration == null)
-        {
+    public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) {
             return null;
         }
         return startTime.plus(duration);
     }
 
-    public TaskType getTaskType()
-    {
+    public TaskType getTaskType() {
         return TaskType.TASK;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         Task task = (Task) o;
@@ -134,21 +113,19 @@ public class Task {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(id);
     }
 
     @Override
-    public String toString()
-    {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", startTime=" + startTime +
-                ", duration=" + (duration != null ? duration.toMinutes() + "m" : "null") +
-                '}';
+    public String toString() {
+        return "Task{"
+                + "title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", id=" + id
+                + ", status=" + status
+                + ", startTime=" + startTime
+                + ", duration=" + (duration != null ? duration.toMinutes() + "m" : "null")
+                + '}';
     }
 }
