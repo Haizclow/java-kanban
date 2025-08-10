@@ -1,22 +1,39 @@
 package com.yandex.app.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("description")
     private String description;
+
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("status")
     private TaskStatus status;
-    private Duration duration;
+
+    @SerializedName("startTime")
     private LocalDateTime startTime;
+
+    @SerializedName("duration")
+    private Duration duration;
+
+    public Task() {
+    }
 
     public Task(String title, String description) {
         this(title, description, null, 0);
     }
 
-    public Task(String title, String description, LocalDateTime startTime, long durationMinutes) {
+    public Task(String title, String description, LocalDateTime startTime,
+                long durationMinutes) {
         this.title = title;
         this.description = description;
         this.status = TaskStatus.NEW;
@@ -85,8 +102,12 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Task task = (Task) o;
         return id == task.id;
     }
@@ -98,13 +119,13 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", startTime=" + startTime +
-                ", duration=" + (duration != null ? duration.toMinutes() + "m" : "null") +
-                '}';
+        return "Task{"
+                + "title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", id=" + id
+                + ", status=" + status
+                + ", startTime=" + startTime
+                + ", duration=" + (duration != null ? duration.toMinutes() + "m" : "null")
+                + '}';
     }
 }
